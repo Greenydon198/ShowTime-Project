@@ -25,6 +25,7 @@ public class UserController {
             return userService.addUser(userDto);
         }
         catch(Exception e){
+            System.out.println(e.getMessage()+" at addUser");
             return "Bad Request/User with the given emailId or mobileNo is already registered.";
         }
     }
@@ -38,6 +39,7 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
         }
         catch (Exception e){
+            System.out.println(e.getMessage()+" at getUserByEmailId");
             UserTransformer.setStatus(user,false);
             return new ResponseEntity<>(user,HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -52,6 +54,7 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
         }
         catch (Exception e){
+            System.out.println(e.getMessage()+" at getUserByMobile");
             UserTransformer.setStatus(user,false);
             return new ResponseEntity<>(user,HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -66,6 +69,7 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         catch (Exception e){
+            System.out.println(e.getMessage()+" at getOldestUser");
             UserTransformer.setStatus(user,false);
             return new ResponseEntity<>(user,HttpStatus.INTERNAL_SERVER_ERROR);
         }

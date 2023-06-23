@@ -3,7 +3,7 @@ package com.project.ShowTime.Services;
 import com.project.ShowTime.DTOs.RequestDTOs.TheatreEntryDto;
 import com.project.ShowTime.DTOs.RequestDTOs.TheatreSeatsEntryDto;
 import com.project.ShowTime.Enums.SeatType;
-import com.project.ShowTime.Exceptions.TheatreNotFoundException;
+import com.project.ShowTime.Exceptions.TheatreNotFound;
 import com.project.ShowTime.Models.Theatre;
 import com.project.ShowTime.Models.TheatreSeat;
 import com.project.ShowTime.Repositories.TheatreRepository;
@@ -34,17 +34,17 @@ public class TheatreService {
             theatre = theatreRepository.findByLocation(theatreSeatsEntryDto.getLocation());
         }
         catch(Exception e){
-            throw new TheatreNotFoundException("Theatre is not added.");
+            throw new TheatreNotFound("Theatre is not added.");
         }
 
         if(theatre==null){
-            throw new TheatreNotFoundException("Theatre is not added.");
+            throw new TheatreNotFound("Theatre is not added.");
         }
 
         List<TheatreSeat> seatList = theatre.getTheatreSeatList();
 
         if(seatList.size()>0)
-            throw new TheatreNotFoundException("Seats in this Theatre are already added.");
+            throw new TheatreNotFound("Seats in this Theatre are already added.");
 
         int i=1;
         for(;i<=theatreSeatsEntryDto.getNoOfClassicRows();i++){

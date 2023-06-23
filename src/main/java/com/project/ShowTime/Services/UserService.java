@@ -2,7 +2,7 @@ package com.project.ShowTime.Services;
 
 import com.project.ShowTime.DTOs.RequestDTOs.RequestUserDto;
 import com.project.ShowTime.DTOs.ResponseDTOs.ResponseUser;
-import com.project.ShowTime.Exceptions.UserNotFoundException;
+import com.project.ShowTime.Exceptions.UserNotFound;
 import com.project.ShowTime.Models.User;
 import com.project.ShowTime.Repositories.UserRepository;
 import com.project.ShowTime.Transformers.UserTransformer;
@@ -24,7 +24,7 @@ public class UserService {
         return "User added Successfully";
     }
 
-    public ResponseUser getOldestUser() throws UserNotFoundException {
+    public ResponseUser getOldestUser() throws UserNotFound {
 
         User oldestUser = null;
         int max_age = 0;
@@ -38,7 +38,7 @@ public class UserService {
         }
 
         if(oldestUser==null)
-            throw new UserNotFoundException("User Not found");
+            throw new UserNotFound("User Not found");
 
         ResponseUser responseUser = UserTransformer.convertEntityToDto(oldestUser);
 

@@ -21,7 +21,6 @@ public class UserTransformer {
                 gender(user.getGender()).
                 emailId(user.getEmailId()).
                 mobileNo(user.getMobileNo()).build();
-
         return responseUser;
     }
 
