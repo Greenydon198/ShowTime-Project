@@ -4,6 +4,7 @@ import com.project.ShowTime.DTOs.RequestDTOs.TheatreEntryDto;
 import com.project.ShowTime.DTOs.RequestDTOs.TheatreSeatsEntryDto;
 import com.project.ShowTime.Enums.SeatType;
 import com.project.ShowTime.Exceptions.TheatreNotFound;
+import com.project.ShowTime.Models.Show;
 import com.project.ShowTime.Models.Theatre;
 import com.project.ShowTime.Models.TheatreSeat;
 import com.project.ShowTime.Repositories.TheatreRepository;
@@ -13,15 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TheatreService {
 
     @Autowired
-    TheatreRepository theatreRepository;
+    private TheatreRepository theatreRepository;
 
     @Autowired
-    TheatreSeatRepository theatreSeatRepository;
+    private TheatreSeatRepository theatreSeatRepository;
 
     public void addTheatre(TheatreEntryDto theatreEntryDto) {
         Theatre theatre = TheatreTransformer.convertDtoToEntity(theatreEntryDto);
@@ -68,5 +70,25 @@ public class TheatreService {
             }
         }
         theatreRepository.save(theatre);
+    }
+
+    public List<Theatre> getAll() {
+        return theatreRepository.findAll();
+    }
+
+    public List<Show> getShowList(int theatreId) throws TheatreNotFound {
+        Optional<Theatre> theatreOptional = theatreRepository.findById(theatreId);
+        if(theatreOptional.isEmpty())
+            throw new TheatreNotFound("Cannot find the Theatre.");
+
+        return theatreOptional.get().getShowList();
+    }
+
+    public List<TheatreSeat> getTheatreSeats(int theatreId) throws TheatreNotFound {
+        Optional<Theatre> theatreOptional = theatreRepository.findById(theatreId);
+        if(theatreOptional.isEmpty())
+            throw new TheatreNotFound("Cannot find the Theatre.");
+
+        return theatreOptional.get().getTheatreSeatList();
     }
 }

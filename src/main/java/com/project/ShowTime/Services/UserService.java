@@ -3,6 +3,7 @@ package com.project.ShowTime.Services;
 import com.project.ShowTime.DTOs.RequestDTOs.RequestUserDto;
 import com.project.ShowTime.DTOs.ResponseDTOs.ResponseUser;
 import com.project.ShowTime.Exceptions.UserNotFound;
+import com.project.ShowTime.Models.Ticket;
 import com.project.ShowTime.Models.User;
 import com.project.ShowTime.Repositories.UserRepository;
 import com.project.ShowTime.Transformers.UserTransformer;
@@ -10,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
 
     //add error if email already present
@@ -63,6 +65,15 @@ public class UserService {
         return userRepository.usersGreaterThan(age);
     }
 
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
 
+    public List<Ticket> getTicketList(int userId) throws UserNotFound {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if(userOptional.isEmpty())
+            throw new UserNotFound("Cannot find the User.");
 
+        return userOptional.get().getTicketList();
+    }
 }

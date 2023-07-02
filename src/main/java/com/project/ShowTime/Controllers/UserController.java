@@ -2,6 +2,7 @@ package com.project.ShowTime.Controllers;
 
 import com.project.ShowTime.DTOs.RequestDTOs.RequestUserDto;
 import com.project.ShowTime.DTOs.ResponseDTOs.ResponseUser;
+import com.project.ShowTime.Models.Ticket;
 import com.project.ShowTime.Models.User;
 import com.project.ShowTime.Services.UserService;
 import com.project.ShowTime.Transformers.UserTransformer;
@@ -17,7 +18,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping("/adduser")
     public String addUser(@RequestBody RequestUserDto userDto){
@@ -85,5 +86,19 @@ public class UserController {
     public List<User> getAgeGreaterThan(@RequestParam int age){
         List<User> userList = userService.getAgeGreaterThan(age);
         return userList;
+    }
+
+    @GetMapping("/getAll")
+    public List<User> getAll(){
+        return userService.getAll();
+    }
+
+    @GetMapping("/getTicketList/{userId}")
+    public ResponseEntity<List<Ticket>> getTicketList(@PathVariable int userId){
+        try{
+            return new ResponseEntity<>(userService.getTicketList(userId), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
     }
 }

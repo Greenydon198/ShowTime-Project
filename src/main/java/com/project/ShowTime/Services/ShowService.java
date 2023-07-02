@@ -21,11 +21,11 @@ import java.util.Optional;
 public class ShowService {
 
     @Autowired
-    ShowRepository showRepository;
+    private ShowRepository showRepository;
     @Autowired
-    MovieRepository movieRepository;
+    private MovieRepository movieRepository;
     @Autowired
-    TheatreRepository theatreRepository;
+    private TheatreRepository theatreRepository;
 
     public void addShow(RequestShowDto requestShowDto) throws MovieNotFound,TheatreNotFound{
         Optional<Movie> movieOptional = movieRepository.findById(requestShowDto.getMovieId());
@@ -85,5 +85,35 @@ public class ShowService {
             showSeatList.add(showSeat);
         }
         showRepository.save(show);
+    }
+
+    public String highestShowedMovie() {
+        try {
+            int movieId = showRepository.getHighestShowedMovie();
+            Movie movie = movieRepository.findById(movieId).get();
+            return movie.getMovieName();
+        }catch (Exception e){
+            return "Nothing is here";
+        }
+    }
+
+    public List<Show> getAll() {
+        return showRepository.findAll();
+    }
+
+    public List<ShowSeat> getShowSeats(int showId) throws ShowNotFound {
+        Optional<Show> showOptional = showRepository.findById(showId);
+        if(showOptional.isEmpty())
+            throw new ShowNotFound("Cannot find the Show.");
+
+        return showOptional.get().getShowSeatList();
+    }
+
+    public List<Ticket> getTicketList(int showId) throws ShowNotFound {
+        Optional<Show> showOptional = showRepository.findById(showId);
+        if(showOptional.isEmpty())
+            throw new ShowNotFound("Cannot find the Show.");
+
+        return showOptional.get().getTicketList();
     }
 }

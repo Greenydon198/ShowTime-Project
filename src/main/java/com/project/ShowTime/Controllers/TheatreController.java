@@ -2,20 +2,23 @@ package com.project.ShowTime.Controllers;
 
 import com.project.ShowTime.DTOs.RequestDTOs.TheatreEntryDto;
 import com.project.ShowTime.DTOs.RequestDTOs.TheatreSeatsEntryDto;
+import com.project.ShowTime.Models.Show;
 import com.project.ShowTime.Models.Theatre;
+import com.project.ShowTime.Models.TheatreSeat;
 import com.project.ShowTime.Services.TheatreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("theatre")
 public class TheatreController {
 
     @Autowired
-    TheatreService theatreService;
+    private TheatreService theatreService;
 
     @PostMapping("/add")
     public String addTheatre(@RequestBody TheatreEntryDto theatreEntryDto){
@@ -36,6 +39,29 @@ public class TheatreController {
         }
         catch(Exception e){
             return e.getMessage();
+        }
+    }
+
+    @GetMapping("/getAll")
+    public List<Theatre> getAll(){
+        return theatreService.getAll();
+    }
+
+    @GetMapping("/getShowList/{theatreId}")
+    public ResponseEntity<List<Show>> getShowList(@PathVariable int theatreId){
+        try{
+            return new ResponseEntity<>(theatreService.getShowList(theatreId), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getTheatreSeats/{theatreId}")
+    public ResponseEntity<List<TheatreSeat>> getTheatreSeats(@PathVariable int theatreId){
+        try{
+            return new ResponseEntity<>(theatreService.getTheatreSeats(theatreId), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
 }

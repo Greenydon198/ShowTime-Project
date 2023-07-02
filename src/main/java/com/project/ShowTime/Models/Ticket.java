@@ -6,44 +6,37 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "shows")
+@Table(name = "Tickets")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Show {
-
+public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int ticketId;
 
-    private LocalTime time;
+    private int totalPrice;
 
-    private Date date;
+    private List<String> bookedSeats = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Movie movie;
+    @CreationTimestamp
+    private Date bookedOn;
 
     @ManyToOne
     @JoinColumn
     @JsonIgnore
-    private Theatre theatre;
+    private Show show;
 
-    @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn
     @JsonIgnore
-    private List<ShowSeat> showSeatList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "show",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Ticket> ticketList = new ArrayList<>();
-
+    private User user;
 }

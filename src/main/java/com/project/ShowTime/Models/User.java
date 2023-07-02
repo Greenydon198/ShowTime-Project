@@ -1,11 +1,15 @@
 package com.project.ShowTime.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.ShowTime.Enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -31,5 +35,9 @@ public class User {
 
     @Column(unique = true)
     private String mobileNo;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Ticket> ticketList = new ArrayList<>();
 
 }
